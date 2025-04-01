@@ -1,0 +1,32 @@
+int method1(){
+    int age;
+    float height;    
+    char name[50];
+    char gender;
+    char introduction[100];
+
+    printf("Enter age: ");
+    scanf("%d", &age);
+    getchar();  // Remove newline characters remaining in the input buffer
+
+    printf("Enter height: ");
+    scanf("%.2f", &height);
+    getchar();  // Remove newline characters remaining in the input buffer
+
+    printf("Enter name: ");
+    scanf("%s", name);
+    getchar();  // Remove newline characters remaining in the input buffer
+
+    printf("Enter gender: ");
+    scanf("%c", &gender);
+    getchar();  // Remove newline characters remaining in the input buffer
+
+    printf("Enter introduction: ");
+    scanf("%s", introduction);
+    getchar();  // Remove newline characters remaining in the input buffer
+
+    printf("Age: %d, Height: %.2f, Name: %s, Gender:%c, Intoduction:%s", 
+        age, height, name, gender, introduction);
+
+    return 0;
+}
