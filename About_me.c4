@@ -1,0 +1,112 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_JUDGES 100
+#define MAX_LEN 512
+
+// Array to store each judge's JSON-like string
+char judges_array[MAX_JUDGES][MAX_LEN];
+
+void trim_newline(char *str) {
+    int len = strlen(str);
+    if (str[len - 1] == '\n') str[len - 1] = '\0';
+}
+
+// Count how many fields are in the input line
+int count_fields(const char *line) {
+    int count = 1;
+    for (int i = 0; line[i]; i++) {
+        if (line[i] == ',') count++;
+    }
+    return count;
+}
+
+void display_judge_data(int total_judges, const char *project_name) {
+    printf("####################################\n");
+    printf("#        Display Judge Data        #\n");
+    printf("####################################\n");
+
+    for (int i = 0; i < total_judges; i++) {
+        printf("[Judge %d]\n", i + 1);
+
+        // Copy to a buffer to tokenize safely
+        char buffer[MAX_LEN];
+        strcpy(buffer, judges_array[i]);
+
+        // Tokenize
+        char *token = strtok(buffer, ",");
+        const char *fields[] = {
+            "Name", "Gender", "Affiliation", "Title",
+            "Expertise", "Email", "Phone"
+        };
+        int index = 0;
+
+        while (token && index < 7) {
+            // Trim leading space if any
+            while (*token == ' ') token++;
+            printf("%s: %s\n", fields[index++], token);
+            token = strtok(NULL, ",");
+        }
+
+        printf("-----------------------------------\n");
+    }
+}
+
+int main() {
+    char project_name[100];
+    int total_judges, selected_members;
+
+    // Input project name
+    printf("####################################\n");
+    printf("#      Judge List Data Entry      #\n");
+    printf("####################################\n");
+    printf("Participating Project: ");
+    fgets(project_name, sizeof(project_name), stdin);
+    trim_newline(project_name);
+
+    // Input total number of judges
+    printf("Total Number of Judges: ");
+    scanf("%d", &total_judges);
+    getchar();  // clear newline
+
+    printf("Number of Selected Members: ");
+    scanf("%d", &selected_members);
+    getchar();  // clear newline
+
+    printf("++++++++++++++++++++++++++++++++++++\n");
+    printf("Starting to input information for %d judges.\n", total_judges);
+    printf("++++++++++++++++++++++++++++++++++++\n");
+
+    int entered = 0;
+    while (entered < total_judges) {
+        printf("Judge %d: ", entered + 1);
+        fgets(judges_array[entered], MAX_LEN, stdin);
+        trim_newline(judges_array[entered]);
+
+        if (count_fields(judges_array[entered]) != 7) {
+            printf("The input items are incorrect. Please enter them again.\n");
+            continue; // repeat input for this judge
+        }
+
+        entered++;
+    }
+
+    printf("++++++++++++++++++++++++++++++++++++\n");
+    printf("Judge information entry is complete.\n");
+    printf("++++++++++++++++++++++++++++++++++++\n");
+
+    // Ask to display
+    char check;
+    printf("Should we check the judge information? ");
+    scanf(" %c", &check); // space before %c to skip any newline
+
+    if (check == 'Y') {
+        printf("\n[%s] Should we check the judge information? Y\n", project_name);
+        display_judge_data(total_judges, project_name);
+    } else {
+        printf("Program terminated.\n");
+    }
+
+    return 0;
+}
