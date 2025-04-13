@@ -1,1 +1,77 @@
+### ✅ `splash.c`
 
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+#ifdef _WIN32
+    #define CLEAR_COMMAND "cls"
+#else
+    #define CLEAR_COMMAND "clear"
+#endif
+
+#define MAX_WIDTH 101
+#define MESSAGE_LINE_COUNT 5
+
+void print_splash(const char *name, const char *date) {
+    const char *messages[MESSAGE_LINE_COUNT] = {
+        "[Magrathea ver 0.1]",
+        "Magrathea, where a shining planet is created in a wasteland with no grass,",
+        "a place where unseen potential is discovered and gems are polished by the hands of experts,",
+        "Welcome to Magrathea.",
+        ""
+    };
+
+    printf("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+
+    for (int i = 0; i < MESSAGE_LINE_COUNT; ++i) {
+        // Print left triangle
+        for (int j = 0; j <= i; ++j) {
+            putchar('*');
+        }
+
+        // Center text
+        printf("%*s", (MAX_WIDTH - i - (int)strlen(messages[i])) / 2, "");
+        printf("%s", messages[i]);
+
+        // Print right inverted triangle
+        for (int j = 0; j < MESSAGE_LINE_COUNT - i; ++j) {
+            putchar('*');
+        }
+
+        putchar('\n');
+    }
+
+    printf("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+    printf("[User]: %s                                   [Execution Time]: %s\n", name, date);
+    printf("=============================================================================================================\n");
+}
+
+int main(void) {
+    char name[100];
+    char date[11]; // "yyyy-mm-dd" + '\0'
+
+    printf("[Please enter the current date in the \"yyyy-mm-dd\" format]: ");
+    scanf("%10s", date);
+
+    printf("[Please enter your name]: ");
+    scanf(" %[^\n]s", name); // Accepts spaces
+
+    printf("**The input has been processed successfully.**\n");
+
+    // Delay for 3 seconds
+    #ifdef _WIN32
+        system("timeout /t 3 >nul");
+    #else
+        system("sleep 3");
+    #endif
+
+    // Clear the screen
+    system(CLEAR_COMMAND);
+
+    // Display splash screen
+    print_splash(name, date);
+
+    return 0;
+}
+```
